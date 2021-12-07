@@ -1,20 +1,19 @@
 package com.productmanagement.service;
 
 import java.util.List;
-
-import com.productmanagement.dto.Product;
 import com.productmanagement.dto.ProductDto;
+import com.productmanagement.entites.ProductEntity;
 
 public interface ProductService {
 
-	public List<Product> getAllProduct();
+	public List<ProductEntity> getAllProduct();
 
-	public Product getProductById(Integer productId);
+	public ProductEntity getProductById(Long productId);
 
-	public Product addProduct(ProductDto productDto);
+	public ProductEntity addProduct(ProductDto productDto);
 
-	public Product updateProduct(Integer productId, ProductDto productDto);
+	public void updateProduct(Long productId, ProductDto productDto);
 
-	public Product deleteProduct(Integer productId);
+	public void deleteProduct(Long productId);
 
 }

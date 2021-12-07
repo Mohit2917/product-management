@@ -1,15 +1,19 @@
 package com.productmanagement.dto;
 
+import com.productmanagement.entites.UserEntity;
+
 public class ProductDto {
 	private String name;
-	private String category;
+	private CategoryMasterDto category;
 	private int price;
+	private UserEntity user;
 
-	public ProductDto(String name, String category, int price) {
+	public ProductDto(String name, CategoryMasterDto category, int price, UserEntity user) {
 		super();
 		this.name = name;
 		this.category = category;
 		this.price = price;
+		this.user = user;
 	}
 
 	public String getName() {
@@ -20,11 +24,11 @@ public class ProductDto {
 		this.name = name;
 	}
 
-	public String getCategory() {
+	public CategoryMasterDto getCategory() {
 		return category;
 	}
 
-	public void setCategory(String category) {
+	public void setCategory(CategoryMasterDto category) {
 		this.category = category;
 	}
 
@@ -34,6 +38,14 @@ public class ProductDto {
 
 	public void setPrice(int price) {
 		this.price = price;
+	}
+
+	public UserEntity getUser() {
+		return user;
+	}
+
+	public void setUser(UserEntity user) {
+		this.user = user;
 	}
 
 }

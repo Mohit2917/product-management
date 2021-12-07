@@ -2,7 +2,9 @@ package com.productmanagement.controller;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,42 +14,48 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.productmanagement.dto.Product;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.productmanagement.dto.ProductDto;
+import com.productmanagement.entites.ProductEntity;
 import com.productmanagement.service.ProductService;
-import com.productmanagement.service.ProductServiceImpl;
 
 @RequestMapping("/product")
 @RestController
 public class ProductRestController {
+
+    @Qualifier("ProductServiceDbImpl")
+	private ProductService productService;
+    
+    public ProductRestController(ProductService productService) {
+        this.productService = productService;
+    }
 	
-	public ProductService productService = new ProductServiceImpl();
+    @GetMapping
+    public List<ProductEntity> getAllProduct() {
+        return productService.getAllProduct();
+    }
 	
-	@GetMapping
-	public List<Product> getAllProduct(){
-		return productService.getAllProduct();
-	}
+    
+    @GetMapping({"/{productId}"})
+    public ProductEntity getProductById(@PathVariable Long productId) {
+        return productService.getProductById(productId);
+    }
 	
-	@GetMapping("/{productId}")
-	public Product getProductById(@PathVariable Integer productId) {
-		return productService.getProductById(productId);
-	}
-	
+    
 	@PostMapping
-	public Product addProduct(@RequestBody ProductDto productDto) {
+	public ProductEntity addProduct(@RequestBody ProductDto productDto) {
 		return productService.addProduct(productDto);
 	}
 	
 	@PutMapping("/{productId}")
-	public Product updateProduct(@PathVariable Integer productId, ProductDto productDto) {
-		
-		return productService.updateProduct(productId, productDto);
+	public ProductEntity updateProduct(@PathVariable Long productId,@RequestBody ProductDto productDto) {
+		productService.updateProduct(productId, productDto);
+        return productService.getProductById(productId);
 	}
 	
 	@DeleteMapping("/{productId}")
-	public Product deleteProduct(@PathVariable Integer productId) {
-		return productService.deleteProduct(productId);
-		
+	public void deleteProduct(@PathVariable Long productId) {
+		productService.deleteProduct(productId);	
 	}
 	
 
