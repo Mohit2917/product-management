@@ -4,19 +4,23 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.productmanagement.dto.UserDto;
 import com.productmanagement.entites.UserEntity;
+import com.productmanagement.passwordEncoder.CustomPasswordEncoder;
 import com.productmanagement.repository.UserRepository;
 
 @Service
 public class UserServiceImpl implements UserService {
-	
+
 	@Autowired
 	private UserRepository userRepo;
-	
+	private CustomPasswordEncoder passEncoder = new CustomPasswordEncoder();
+
 	@Override
 	public List<UserEntity> getAllProduct() {
 		return userRepo.findAll();
@@ -24,20 +28,20 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public UserEntity findByEmail(String userEmail) {
-		Optional<UserEntity> findByEmail = userRepo.findByEmail(userEmail);
-		if (findByEmail.isPresent()) {
-			return findByEmail.get();
+		UserEntity findByEmail = userRepo.findByEmail(userEmail);
+		if (findByEmail != null) {
+			return findByEmail;
 		}
 		throw new EmptyResultDataAccessException("user not found by this email", 1);
 	}
 
 	@Override
 	public UserEntity addUser(UserDto userDto) {
-		UserEntity ue= new UserEntity();
+		UserEntity ue = new UserEntity();
 		ue.setFirstName(userDto.getFirstName());
 		ue.setLastName(userDto.getLastName());
 		ue.setEmail(userDto.getEmail());
-		ue.setPassword(userDto.getPassword());
+		ue.setPassword(passEncoder.encode(userDto.getPassword()));
 		return userRepo.save(ue);
 	}
 

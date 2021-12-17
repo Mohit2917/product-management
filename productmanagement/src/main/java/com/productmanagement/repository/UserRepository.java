@@ -8,6 +8,6 @@ import com.productmanagement.entites.UserEntity;
 
 public interface UserRepository extends JpaRepository<UserEntity, Long> {
 	
-	Optional<UserEntity> findByEmail(String email);
+	public UserEntity findByEmail(String email);
 
 }

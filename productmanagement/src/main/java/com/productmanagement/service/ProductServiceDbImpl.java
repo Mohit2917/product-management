@@ -21,7 +21,8 @@ public class ProductServiceDbImpl implements ProductService {
 	@Autowired
 	private ProductRepository productRepository;
 	
-	
+	@Autowired
+	private UserDetailsServiceImpl UserDetailsService;
 	
 
 	 public ProductServiceDbImpl(ProductRepository productRepository, ModelMapper mapper) {
@@ -52,7 +53,7 @@ public class ProductServiceDbImpl implements ProductService {
 		pe.setName(productDto.getName());
 		pe.setCategory(dtoToEntity.getCategory());
 		pe.setPrice(productDto.getPrice());
-		pe.setUser(productDto.getUser());
+		pe.setUser(UserDetailsService.getUserDetails());
 		return productRepository.save(pe);
 	}
 
@@ -64,7 +65,7 @@ public class ProductServiceDbImpl implements ProductService {
 		productEntity.setName(productDto.getName());
 		productEntity.setCategory(dtoToEntity.getCategory());
 		productEntity.setPrice(productDto.getPrice());
-		productEntity.setUser(productDto.getUser());
+		productEntity.setUser(UserDetailsService.getUserDetails());
 		productRepository.save(productEntity);
 	}
 
@@ -73,10 +74,13 @@ public class ProductServiceDbImpl implements ProductService {
 		productRepository.deleteById(productId);
 	}
 	
+	//convert entity to dto
 	private ProductDto entityToDto(ProductEntity productEntity) {
 		ProductDto productDto = mapper.map(productEntity, ProductDto.class);
 		return productDto;
 	}
+	
+	//convert dto to entity
 	private ProductEntity dtoToEntity(ProductDto productDto) {
 		ProductEntity productEntity = mapper.map(productDto, ProductEntity.class);
 		return productEntity;
